@@ -6,6 +6,9 @@ from tkinter import *
 from PIL import ImageTk,Image
 import os
 import random
+from data import usa
+import json
+import numpy as np
 
 
 # Quiz interface class
@@ -21,7 +24,7 @@ class Quiz:
         # load warthunder logo image
         self.img = ImageTk.PhotoImage(Image.open("./Images/War-Thunder-logo.jpg"))
         # create canvas
-        self.canvas = Canvas(self.window, width=1000, height=800)
+        self.canvas = Canvas(self.window, width=1000, height=1000)
         self.canvas.pack()
         # load image on canvas
         self.canvas.create_image(500, 400, anchor = S ,image=self.img)
@@ -35,20 +38,18 @@ class Quiz:
 
     def select_country(self):
         # clear screen and show country selection
-        self.window.destroy()
-        self.window = Tk()
-        self.window.title("Warthunder Quiz")
-        self.window.geometry("1000x800")
+        for widget in self.window.winfo_children():
+            widget.destroy() 
         # create heading
         self.canvas = Canvas(self.window, width=1000, height=800)
         self.canvas.pack()
         self.canvas.create_text(500, 100, text="Select your country", font=("Arial", 30))
         
         # germany button
-        self.germany = Button(self.window, text="Germany", height=5, width=25, command=self.germany)
+        self.germany = Button(self.window, text="Germany", height=5, width=25)
         self.germany.place(x=100, y=200)
         # usa button
-        self.usa = Button(self.window, text="USA", height=5, width=25)
+        self.usa = Button(self.window, text="USA", height=5, width=25, command=self.usa)
         self.usa.place(x=300, y=200)
         # ussr button
         self.ussr = Button(self.window, text="USSR", height=5, width=25)
@@ -74,43 +75,21 @@ class Quiz:
         # israel button
         self.israel = Button(self.window, text="Israel", height=5, width=25)
         self.israel.place(x=300, y=400)
-    
-    def germany(self):
-        self.window.destroy()
-        self.window = Tk()
-        self.window.title("Warthunder Quiz")
-        self.window.geometry("1000x800")
-        # create heading
-        self.canvas = Canvas(self.window, width=1000, height=800)
+                
+    def usa(self):
+        # clear screen
+        for widget in self.window.winfo_children():
+            widget.destroy() 
         # Text at top
-        self.canvas.create_text(500, 100, text="What is this tank?", font=("Arial", 30))
+        self.canvas = Canvas(self.window, width=1000, height=800)
+        self.canvas.create_text(500, 50, text="What is this tank?", font=("Arial", 30))
         self.canvas.pack()
-        images = []
-        answers = ["panzer 3 e", "panzer 3 f", "panzer 2 c"]
-        for file in os.listdir("./Images/Germany"):
-            if file.endswith(".jpg"):
-                images.append(file)
-               
-        for i in images:
-            # pick a random image and show on screen
-            self.img = ImageTk.PhotoImage(Image.open("./Images/Germany/" + random.choice(images)))
-            self.canvas.create_image(500, 600, anchor = S ,image=self.img)
-            #create entry box to get input
-            self.entry = Entry(self.window, width=30)
-            self.entry.place(x=400, y=600)
-            # create submit button
-            self.submit = Button(self.window, text="Submit", height=2, width=25)
-            self.submit.place(x=400, y=620)
-            answer = answers[images.index(i)]
-            # check if answer is correct
-            
-            
         
-    
-    
+        questions = usa
+        random.shuffle(questions)
         
-
-
+        already_asked = []
+  
 quiz = Quiz()
 
 
